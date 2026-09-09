@@ -248,12 +248,12 @@ carrying a per-row prior from the probe. Ground truth is the filesystem.
 
 | Stratum | N | Predicted | Predicted CI | **Actual** | Actual 95% CI | In CI? |
 |---|---|---|---|---|---|---|
-| `imgur_direct` | 2,798 | 92% | 85–96% | **96.3%** | 95.4–96.9 | no (high) |
+| `imgur_direct` | 2,798 | 92% | 85–96% | **96.3%** | 95.5–96.9 | no (high) |
 | `imgur_gifv` | 2,722 | 86% | 78–91% | **99.9%** | 99.7–100 | no (high) |
 | `removed_reddit_cdn` | 774 | 66% | 57–74% | **100.0%** | 99.5–100 | no (high) |
 | `removed_external` | 191 | 44% | 36–53% | **100.0%** | 98.0–100 | no (high) |
 | `imgur_album` | 8 | 0% | 0–3% | **0.0%** | 0–32.4 | yes |
-| **Total** | **6,493** | **84.9%** | | **98.2%** | 97.8–98.5 | — |
+| **Total** | **6,493** | **84.9%** | | **98.2%** | 97.9–98.5 | — |
 
 **Predicted 5,510 recoveries; actual 6,376. The forecast was low by 866 posts.**
 Four of five strata landed above their upper CI bound — a one-directional miss,
@@ -356,9 +356,10 @@ recovery rate is genuinely unknown.**
 
 **→ https://github.com/nothing3471/reddit-link-rot**
 
-- `data/VALIDATION_predicted_vs_actual.csv` — the Finding 8 scoring table: per stratum, predicted rate, prediction CI, actual rate, actual CI
+- `data/VALIDATION_predicted_vs_actual.csv` — the Finding 8 scoring table: per stratum, predicted rate, prediction CI, actual rate, actual CI. It counts download records, so its total is 6,378 rather than the 6,376 quoted above; `data/README.md` explains the two-post difference
 - `scripts/audit/` — the 26 scripts that produced the audit, including the Wayback availability probes and the tombstone detector
 - `scripts/sample_gfycat_recovery.py` — the Finding 9 sampler, if you want to close that gap yourself
+- `scripts/repair_false_retirements.py` — the only script here that changes your data rather than reading it. It un-retires posts that were marked dead by a prefix-matching bug in the failure log. It needs `--apply` to write anything; without it, it prints what it would do
 - MIT for code, CC BY 4.0 for data
 
 ### What the audit scripts are, and what they are not

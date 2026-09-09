@@ -1,10 +1,13 @@
 import sys,ssl,socket,urllib.request,urllib.error,time
 sys.stdout.reconfigure(encoding='utf-8')
 UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
+# Any archived image works here; the probe only checks whether replay bytes
+# come back at all. Pass your own as argv[1] if this snapshot ever goes away.
+IMG=sys.argv[1] if len(sys.argv)>1 else 'https://web.archive.org/web/20230509074804/https://i.imgur.com/4qqYSa0.jpg'
 tests=[('archive.org availability API','https://archive.org/wayback/available?url=example.com'),
        ('web.archive.org root','https://web.archive.org/'),
        ('web.archive.org replay (html)','https://web.archive.org/web/2023/https://example.com/'),
-       ('web.archive.org replay (image)','https://web.archive.org/web/20230509074804/https://i.imgur.com/4qqYSa0.jpg')]
+       ('web.archive.org replay (image)',IMG)]
 for name,u in tests:
     try:
         print('  DNS %-32s -> %s'%(u.split('/')[2],socket.gethostbyname(u.split('/')[2])))

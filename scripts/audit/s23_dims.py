@@ -41,6 +41,8 @@ for p in files:
         ws.append(max(d))
         if max(d)<=200: small.append((d,os.path.getsize(p),os.path.basename(p)))
 ws.sort()
+if not ws:
+    sys.exit('No image dimensions could be read from %d file(s). Nothing to measure.' % len(files))
 print('long-edge px measured for %d/%d'%(len(ws),len(files)))
 print('  min=%d p05=%d p25=%d median=%d p75=%d p95=%d max=%d'%(ws[0],ws[len(ws)//20],ws[len(ws)//4],ws[len(ws)//2],ws[3*len(ws)//4],ws[19*len(ws)//20],ws[-1]))
 for thr in (140,200,320,480,640):

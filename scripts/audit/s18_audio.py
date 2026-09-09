@@ -30,6 +30,8 @@ noaud=[]
 for p in s:
     r=has_audio(p); c[r]+=1
     if r is False: noaud.append(p)
+if not s:
+    sys.exit('No video files found under %s. Nothing to measure.' % os.path.join(R,'Video'))
 print('sample n=%d  has_audio: %s'%(len(s),dict(c)))
 print('  -> silent (video-only) share: %.1f%%'%(100.0*c[False]/len(s)))
 for p in noaud[:8]: print('     SILENT %8d B  %s'%(os.path.getsize(p),os.path.basename(p)[:88]))
