@@ -1,0 +1,12 @@
+# never commit the archive itself or anything derived from saved-post content
+*.jsonl
+*.db
+*.db-shm
+*.db-wal
+EXTERNAL_DRIVE_CLEANUP_manifest.csv
+gfycat_sample_results.csv
+media/
+Images/
+Video/
+Animated/
+Text/

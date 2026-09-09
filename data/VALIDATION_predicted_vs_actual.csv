@@ -1,0 +1,7 @@
+stratum,n_posts,predicted_pct,predicted_ci_low,predicted_ci_high,actual_recovered,actual_pct,actual_ci_low,actual_ci_high,predicted_inside_actual_ci,actual_inside_predicted_ci
+imgur_direct,2798,92.0,85.0,96.0,2694,96.3,95.5,96.9,no,no
+imgur_gifv,2722,86.0,78.0,91.0,2719,99.9,99.7,100.0,no,no
+removed_reddit_cdn,774,66.0,57.0,74.0,774,100.0,99.5,100.0,no,no
+removed_external,191,44.0,36.0,53.0,191,100.0,98.0,100.0,no,no
+imgur_album,8,0.0,0.0,3.0,0,0.0,0.0,32.4,yes,yes
+TOTAL,6493,84.9,,,6378,98.2,97.9,98.5,no,n/a
