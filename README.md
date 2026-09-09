@@ -382,12 +382,11 @@ The `s1`–`s25` numbering is the order I wrote them in, not a pipeline. Each an
 one question and prints to stdout. Start with `s1_schema.py`: if your database does
 not have the shape the other 25 assume, that is where you find out.
 
-My own absolute paths were stripped out of these before release, and the first pass
-at that left `%REDDIT_ARCHIVE%` behind as a literal string. That is cmd.exe syntax;
-Python does not expand it. All 25 affected scripts either died on an unopenable path
-or, in the case of `s10_hunt.py`, walked nothing and reported zero files scanned as
-though that were the answer. They read the environment variable properly now. Worth
-stating because the bug and the instruction are the same thing.
+My own paths were stripped out of these before release, and the first pass at that
+left `%REDDIT_ARCHIVE%` behind as a literal string. Python does not expand `%VAR%` —
+that is cmd.exe syntax. All 25 affected scripts either died on an unopenable path or,
+in `s10_hunt.py`'s case, walked nothing and reported zero files scanned as though
+that were an answer. They read the variable properly now.
 
 **No media is redistributed and no saved-post content is published** — the release
 is aggregate measurements and tooling only. The scripts run against your *own*
