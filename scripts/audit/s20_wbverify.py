@@ -5,6 +5,7 @@ import os,sys,json,re,time,random,collections,urllib.request,urllib.error
 sys.stdout.reconfigure(encoding='utf-8')
 R=os.environ.get('REDDIT_ARCHIVE') or sys.exit('REDDIT_ARCHIVE is not set. Point it at your archive root and re-run - see the README.')
 A=os.path.join(R,'_logs','_audit3')
+os.makedirs(A, exist_ok=True)
 UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) reddit-archive-audit/1.0'
 recs=[json.loads(l) for l in open(os.path.join(A,'wayback_results.jsonl'),encoding='utf-8') if l.strip()]
 hits=[r for r in recs if r['verdict']=='HIT' and r.get('snap_url')]

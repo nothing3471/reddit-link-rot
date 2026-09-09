@@ -4,6 +4,7 @@ import os,sys,json,csv,re,sqlite3,collections
 sys.stdout.reconfigure(encoding='utf-8')
 R=os.environ.get('REDDIT_ARCHIVE') or sys.exit('REDDIT_ARCHIVE is not set. Point it at your archive root and re-run - see the README.')
 A=os.path.join(R,'_logs','_audit3')
+os.makedirs(A, exist_ok=True)
 dead=list(csv.DictReader(open(os.path.join(R,'_logs','dead_list_candidates.csv'),encoding='utf-8',newline='')))
 deadids=set(x['id'] for x in dead)
 d=json.load(open(os.path.join(A,'disk_ids.json')))

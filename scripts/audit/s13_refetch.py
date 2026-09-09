@@ -4,6 +4,7 @@ import os,sys,json,sqlite3,re,collections
 sys.stdout.reconfigure(encoding='utf-8')
 R=os.environ.get('REDDIT_ARCHIVE') or sys.exit('REDDIT_ARCHIVE is not set. Point it at your archive root and re-run - see the README.')
 A=os.path.join(R,'_logs','_audit3')
+os.makedirs(A, exist_ok=True)
 con=sqlite3.connect(os.path.join(R,'Reddit Export','reddit_saved.db'))
 cur=con.execute("select id,url,domain,media_url,gallery_urls,thumbnail,is_gallery,is_video,post_hint,removed_by,status,is_self from posts")
 cols=[c[0] for c in cur.description]; byid={r[0]:dict(zip(cols,r)) for r in cur}

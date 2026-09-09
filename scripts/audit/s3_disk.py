@@ -3,6 +3,7 @@
 import os,sys,re,json,collections
 sys.stdout.reconfigure(encoding='utf-8')
 R=os.environ.get('REDDIT_ARCHIVE') or sys.exit('REDDIT_ARCHIVE is not set. Point it at your archive root and re-run - see the README.')
+os.makedirs(os.path.join(R,'_logs','_audit3'), exist_ok=True)
 # filename pattern: {sub}_{title}_{id}_{YYYYMMDD}[_NN].ext   OR  {id}_{title}.ext (older pools)
 pat_new=re.compile(r'_([a-z0-9]{4,10})_(\d{8})(?:_\d{2})?$',re.I)
 pat_old=re.compile(r'^([a-z0-9]{4,10})_',re.I)

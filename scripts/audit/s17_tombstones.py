@@ -3,6 +3,7 @@
 import os,sys,hashlib,collections,json,re
 sys.stdout.reconfigure(encoding='utf-8')
 R=os.environ.get('REDDIT_ARCHIVE') or sys.exit('REDDIT_ARCHIVE is not set. Point it at your archive root and re-run - see the README.')
+os.makedirs(os.path.join(R,'_logs','_audit3'), exist_ok=True)
 MAGIC=[(b'\xff\xd8\xff','jpg'),(b'\x89PNG','png'),(b'GIF8','gif'),(b'RIFF','webp'),
        (b'\x1aE\xdf\xa3','webm'),(b'ID3','mp3'),(b'OggS','ogg'),(b'%PDF','pdf'),(b'<!DO','html'),(b'<htm','html'),(b'<?xm','xml')]
 def sniff(b):

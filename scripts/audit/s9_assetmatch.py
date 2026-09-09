@@ -4,6 +4,7 @@ import os,sys,json,csv,re,collections
 sys.stdout.reconfigure(encoding='utf-8')
 R=os.environ.get('REDDIT_ARCHIVE') or sys.exit('REDDIT_ARCHIVE is not set. Point it at your archive root and re-run - see the README.')
 A=os.path.join(R,'_logs','_audit3')
+os.makedirs(A, exist_ok=True)
 idx=json.load(open(os.path.join(R,'Scripts and Data','_media_index.json'),encoding='utf-8',errors='replace'))
 print('index entries:',len(idx))
 print('loc:',collections.Counter(e.get('loc') for e in idx).most_common())

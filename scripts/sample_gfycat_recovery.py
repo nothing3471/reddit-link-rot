@@ -44,11 +44,14 @@ USAGE
 import argparse, csv, json, math, os, random, re, sqlite3, sys, time
 from urllib.parse import quote
 
-HERE    = os.path.dirname(os.path.abspath(__file__))
-ARCHIVE = os.path.dirname(HERE)
+ARCHIVE = os.environ.get("REDDIT_ARCHIVE") or sys.exit(
+    "REDDIT_ARCHIVE is not set. Point it at your archive root and re-run "
+    "- see the README.")
 DB      = os.path.join(ARCHIVE, "Reddit Export", "reddit_saved.db")
-LOG     = os.path.join(HERE, "download_log.jsonl")
-OUT     = os.path.join(HERE, "gfycat_sample_results.csv")
+LOG     = os.path.join(ARCHIVE, "_logs", "download_log.jsonl")
+# Results go to the archive, not next to this script. Writing them into a git
+# checkout is how a sample of your own saved posts ends up in a commit.
+OUT     = os.path.join(ARCHIVE, "_logs", "gfycat_sample_results.csv")
 
 AVAIL   = "https://archive.org/wayback/available?url=%s"
 PACE_S  = 1.5          # be a good citizen; archive.org is a donated resource
@@ -87,6 +90,17 @@ def load_population():
                     attempted.add((json.loads(line).get("post_id") or "").lower())
                 except Exception:
                     pass
+    else:
+        # Without the log every gfycat post looks never-attempted, and the
+        # sample silently comes from the wrong population - the whole point of
+        # this script is the never-attempted subset. Say so rather than print a
+        # plausible plan.
+        print("WARNING: %s not found." % LOG)
+        print("         Treating all %d gfycat posts as never-attempted." % len(gfy))
+        print("         That is NOT the population the README's Finding 9 describes,")
+        print("         and any rate measured from it is not comparable to the 6%% prior.")
+        print()
+
     skipped = [r for r in gfy if r[0] not in attempted]
     return gfy, skipped
 

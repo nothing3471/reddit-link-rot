@@ -1,12 +1,44 @@
-# never commit the archive itself or anything derived from saved-post content
+# Never commit the archive itself, or anything derived from saved-post content.
+# The scripts now write their output into $REDDIT_ARCHIVE/_logs/ rather than into
+# this checkout, but people copy things around, so these stay.
+
+# The archive and its databases
 *.jsonl
 *.db
 *.db-shm
 *.db-wal
+saved_posts.csv
+reddit_saved.db
+Reddit Export/
+Scripts and Data/
+_logs/
+
+# Audit output and one-off results
 EXTERNAL_DRIVE_CLEANUP_manifest.csv
 gfycat_sample_results.csv
+*_results.csv
+*.bak
+
+# Downloaded media trees
 media/
 Images/
 Video/
 Animated/
 Text/
+
+# Credentials, in case a Reddit app ends up configured here
+.env
+.env.*
+*.key
+*_secret*
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Windows
+Thumbs.db
+Desktop.ini
+desktop.ini

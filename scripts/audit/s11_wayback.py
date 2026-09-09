@@ -6,6 +6,7 @@ import os,sys,json,csv,re,time,random,urllib.request,urllib.error,collections
 sys.stdout.reconfigure(encoding='utf-8')
 R=os.environ.get('REDDIT_ARCHIVE') or sys.exit('REDDIT_ARCHIVE is not set. Point it at your archive root and re-run - see the README.')
 A=os.path.join(R,'_logs','_audit3')
+os.makedirs(A, exist_ok=True)
 UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) reddit-archive-audit/1.0'
 FORBIDDEN=re.compile(r'(imgur\.com|redgifs\.com|gfycat\.com|redd\.it|redditmedia\.com|reddit\.com)',re.I)
 

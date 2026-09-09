@@ -4,6 +4,7 @@ import os,sys,csv,json,random,collections,sqlite3,re,math
 sys.stdout.reconfigure(encoding='utf-8')
 R=os.environ.get('REDDIT_ARCHIVE') or sys.exit('REDDIT_ARCHIVE is not set. Point it at your archive root and re-run - see the README.')
 A=os.path.join(R,'_logs','_audit3')
+os.makedirs(A, exist_ok=True)
 print('=== V1. re-derive 8,938 a different way: DB ids that appear in any bucket filename')
 con=sqlite3.connect(os.path.join(R,'Reddit Export','reddit_saved.db'))
 ids=set(r[0].lower() for r in con.execute("select id from posts"))

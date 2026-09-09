@@ -26,7 +26,10 @@ Usage:
 import json, os, shutil, sys
 from collections import defaultdict
 
-LOG    = os.path.join(os.path.dirname(os.path.abspath(__file__)), "download_log.jsonl")
+ARCHIVE = os.environ.get("REDDIT_ARCHIVE") or sys.exit(
+    "REDDIT_ARCHIVE is not set. Point it at your archive root and re-run "
+    "- see the README.")
+LOG    = os.path.join(ARCHIVE, "_logs", "download_log.jsonl")
 MARKER = "false-retirement-prefix-failure_log"
 APPLY  = "--apply" in sys.argv
 

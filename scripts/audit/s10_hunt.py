@@ -4,6 +4,7 @@ import os,sys,json,re,csv,collections,time
 sys.stdout.reconfigure(encoding='utf-8')
 R=os.environ.get('REDDIT_ARCHIVE') or sys.exit('REDDIT_ARCHIVE is not set. Point it at your archive root and re-run - see the README.')
 A=os.path.join(R,'_logs','_audit3')
+os.makedirs(A, exist_ok=True)
 hits=json.load(open(os.path.join(A,'dead_asset_hits.json')))
 want=set()
 paren=re.compile(r'\(([A-Za-z0-9_\-]{5,32})\)[^()]*$')

@@ -180,7 +180,7 @@ This one costs you real data if you get it wrong.
 Same site, two hosts, opposite tools.
 
 **Also: route on the URL, not on the `domain` column.** 587 database rows (1.7%)
-carry a subreddit permalink like `/r/BeAmazed/comments/1blqthw/...` in the
+carry a subreddit permalink (`/r/.../comments/...`) rather than a hostname in the
 `domain` field instead of a hostname. Anything that stratifies or routes on that
 column misroutes all of them — in my case fetching HTML pages instead of videos.
 
@@ -220,7 +220,7 @@ buckets did come from that pool and size-matching is a valid detector — yet th
 6,658 dead assets produce only 54 size collisions, which is coincidence-level.
 
 The likely mechanism: those files were named by *media asset ID*
-(`Seen on Facebook lol (sxyDs6V).jpeg`) with no post-ID mapping, so a
+(a title followed by the bare asset ID, `some title (aBcDeF1).jpeg`) with no post-ID mapping, so a
 reorganisation step couldn't place them, and the source folders were deleted
 afterward.
 
@@ -361,26 +361,55 @@ recovery rate is genuinely unknown.**
 - `scripts/sample_gfycat_recovery.py` — the Finding 9 sampler, if you want to close that gap yourself
 - MIT for code, CC BY 4.0 for data
 
-### Running these against your own archive
+### What the audit scripts are, and what they are not
 
-Python 3.8 or newer, standard library only. There is nothing to install.
+They are the method, not a tool. They ran once, against my archive, to produce the
+numbers above, and they are here so those numbers can be checked instead of taken on
+trust.
 
-The scripts read *your* archive rather than mine, so they need to be told where it
-is:
+Most of them will not run for you as they stand, and it is worth being exact about
+why. They read six files this repo does not contain and cannot generate:
+
+| File | Produced by |
+|---|---|
+| `Reddit Export/reddit_saved.db` | my downloader, seeded from a Reddit GDPR export |
+| `_logs/dead_list_candidates.csv` | the downloader's dead-link pass |
+| `_logs/failures.jsonl` | its failure log |
+| `_logs/download_log.jsonl` | its per-post attempt log |
+| `_logs/download_status.json` | its run state |
+| `Scripts and Data/_media_index.json` | the media indexer |
+
+That downloader is not published. It is wired into my own accounts and paths, and
+untangling it is a bigger job than this release. Treat the audit scripts as
+reference implementations of each measurement — `s1_schema.py` prints the exact
+database schema the other 25 assume, which is the quickest way to see whether your
+own archive could be shaped to fit.
+
+They are also not fully independent, despite the flat numbering. `s3_disk.py` writes
+`disk_ids.json`, which `s4`, `s8` and `s21` read. `s9_assetmatch.py` writes
+`dead_asset_hits.json` for `s10` and `s12`. `s4_partition.py` writes
+`refetch_ids.json` for `s13`. Everything else stands alone.
+
+### Running them
+
+Python 3.8 or newer, standard library only. Nothing to install.
 
 ```powershell
 $env:REDDIT_ARCHIVE = "D:\Reddit Archive"       # PowerShell
 set REDDIT_ARCHIVE=D:\Reddit Archive            # cmd
 export REDDIT_ARCHIVE="/mnt/d/Reddit Archive"   # bash
+
+python scripts/audit/s1_schema.py
 ```
 
-They expect `$REDDIT_ARCHIVE/Reddit Export/reddit_saved.db` — a SQLite file with
-`posts` and `grabs` tables — and a `$REDDIT_ARCHIVE/_logs/` directory. Run one
-without the variable set and it tells you so and stops.
+Run any of them without the variable set and it says so and stops.
 
-The `s1`–`s25` numbering is the order I wrote them in, not a pipeline. Each answers
-one question and prints to stdout. Start with `s1_schema.py`: if your database does
-not have the shape the other 25 assume, that is where you find out.
+`scripts/sample_gfycat_recovery.py` is the one worth your time if you have an
+archive of your own. It needs only the database and the download log, it is dry-run
+until you pass `--probe`, and it writes results into `$REDDIT_ARCHIVE/_logs/` rather
+than into this checkout. If the download log is missing it says so loudly, because
+without it the sample is drawn from the wrong population and the number means
+nothing.
 
 My own paths were stripped out of these before release, and the first pass at that
 left `%REDDIT_ARCHIVE%` behind as a literal string. Python does not expand `%VAR%` —
