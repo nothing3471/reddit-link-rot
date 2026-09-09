@@ -361,30 +361,33 @@ recovery rate is genuinely unknown.**
 - `scripts/sample_gfycat_recovery.py` — the Finding 9 sampler, if you want to close that gap yourself
 - MIT for code, CC BY 4.0 for data
 
-### Running the audit scripts
+### Running these against your own archive
 
-Python 3.8 or newer. **No dependencies** — every script is standard library only,
-so `git clone` and run.
+Python 3.8 or newer, standard library only. There is nothing to install.
 
-The scripts read *your* archive, so point `REDDIT_ARCHIVE` at its root first:
+The scripts read *your* archive rather than mine, so they need to be told where it
+is:
 
 ```powershell
-$env:REDDIT_ARCHIVE = "D:\Reddit Archive"      # PowerShell
-```
-```cmd
-set REDDIT_ARCHIVE=D:\Reddit Archive           # cmd
-```
-```bash
+$env:REDDIT_ARCHIVE = "D:\Reddit Archive"       # PowerShell
+set REDDIT_ARCHIVE=D:\Reddit Archive            # cmd
 export REDDIT_ARCHIVE="/mnt/d/Reddit Archive"   # bash
 ```
 
-They expect to find `$REDDIT_ARCHIVE/Reddit Export/reddit_saved.db` — a SQLite
-database with `posts` and `grabs` tables — and a `$REDDIT_ARCHIVE/_logs/`
-directory. Run one without the variable set and it says so and stops.
+They expect `$REDDIT_ARCHIVE/Reddit Export/reddit_saved.db` — a SQLite file with
+`posts` and `grabs` tables — and a `$REDDIT_ARCHIVE/_logs/` directory. Run one
+without the variable set and it tells you so and stops.
 
-The `s1`..`s25` numbering is the order they were written in, not a pipeline.
-Each answers one question and prints to stdout; start with `s1_schema.py` to see
-whether your database has the shape the rest of them assume.
+The `s1`–`s25` numbering is the order I wrote them in, not a pipeline. Each answers
+one question and prints to stdout. Start with `s1_schema.py`: if your database does
+not have the shape the other 25 assume, that is where you find out.
+
+My own absolute paths were stripped out of these before release, and the first pass
+at that left `%REDDIT_ARCHIVE%` behind as a literal string. That is cmd.exe syntax;
+Python does not expand it. All 25 affected scripts either died on an unopenable path
+or, in the case of `s10_hunt.py`, walked nothing and reported zero files scanned as
+though that were the answer. They read the environment variable properly now. Worth
+stating because the bug and the instruction are the same thing.
 
 **No media is redistributed and no saved-post content is published** — the release
 is aggregate measurements and tooling only. The scripts run against your *own*
