@@ -29,5 +29,8 @@ print('  -> a rename-not-loss story would need thousands of these')
 # also: do the bucket files match the index at all (sanity that index sizes are comparable)
 allidx=collections.Counter(e['size'] for e in idx if e.get('size'))
 ov=set(allidx)&set(bsz)
+if not bsz:
+    sys.exit('No sized files found in the bucket directories under %s - '
+             'nothing to compare against the index.'%R)
 print('sanity: bucket sizes also present anywhere in the 62,984-entry index:',len(ov),
       '(%.0f%% of bucket distinct sizes)'%(100.0*len(ov)/len(bsz)))

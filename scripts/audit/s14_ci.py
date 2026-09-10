@@ -8,7 +8,7 @@ N=collections.Counter(x['stratum'] for x in dead)
 
 # sample-v3 (latest) results, transcribed from sample_v3_result.txt
 v3={'gfycat':(97,100),'imgur_album':(81,100),'imgur_direct':(97,100),'imgur_gifv':(96,100),
-    'other_deadhost':(78,100),'removed_external':(44,100),'removed_reddit_cdn':(67,100)}
+    'other_deadhost':(78,98),'removed_external':(44,100),'removed_reddit_cdn':(67,100)}
 # full-quality (original/gifv_mp4/redgifs) vs preview vs thumbnail, from 'recovered via'
 via={'gfycat':{'preview':51,'redgifs':6,'thumbnail':40},
      'imgur_album':{'preview':2,'thumbnail':79},

@@ -176,7 +176,7 @@ sufficient on its own.
 
 Some reassurance from the same scan: only 364 of 11,387 files were under 30 KB,
 and no image was ≤140px. The archive wasn't broadly polluted — but "8,938 posts
-have files" is about 8,880 once you subtract tombstones and 7 other non-media
+have files" is 8,877 once you subtract tombstones and 7 other non-media
 files (3 HTML pages saved as `.gif`, 2 duplicate blobs, 2 misc).
 
 ## Finding 5: the two Reddit hosts need opposite tools
@@ -189,8 +189,8 @@ This one costs you real data if you get it wrong.
 Same site, two hosts, opposite tools.
 
 **Also: route on the URL, not on the `domain` column.** 587 database rows (1.7%)
-carry a subreddit permalink (`/r/.../comments/...`) rather than a hostname in the
-`domain` field instead of a hostname. Anything that stratifies or routes on that
+carry a subreddit permalink (`/r/.../comments/...`) in the `domain` field
+rather than a hostname. Anything that stratifies or routes on that
 column misroutes all of them — in my case fetching HTML pages instead of videos.
 
 (My working notes give **651** for what appears to be the same defect counted
@@ -310,7 +310,7 @@ For context on scale, the archive went from **8,938 to 27,188 posts with media**
 I tried to close the gap Finding 8 left open. I couldn't, and the reason is worth
 more than the number would have been.
 
-There are **1,174 gfycat posts** in the database. Their current state:
+There are **1,174 gfycat posts** in the database — note that this is every gfycat post, not the 1,055 that landed on the dead list and carry the 6% prior in Finding 2. Different denominators, deliberately. Their current state:
 
 | | Posts | |
 |---|---|---|
@@ -390,6 +390,8 @@ why. They read six files this repo does not contain and cannot generate:
 | `_logs/download_log.jsonl` | its per-post attempt log |
 | `_logs/download_status.json` | its run state |
 | `Scripts and Data/_media_index.json` | the media indexer |
+| `Scripts and Data/media_library.db` | the media indexer (`s8` only) |
+| `Reddit Export/downloaded_archive.txt` | the downloader's completion log (`s5`, `s8`) |
 
 That downloader is not published. It is wired into my own accounts and paths, and
 untangling it is a bigger job than this release. Treat the audit scripts as
