@@ -5,7 +5,11 @@ sys.stdout.reconfigure(encoding='utf-8')
 R=os.environ.get('REDDIT_ARCHIVE') or sys.exit('REDDIT_ARCHIVE is not set. Point it at your archive root and re-run - see the README.')
 A=os.path.join(R,'_logs','_audit3')
 os.makedirs(A, exist_ok=True)
-hits=json.load(open(os.path.join(A,'dead_asset_hits.json')))
+_hits_path=os.path.join(A,'dead_asset_hits.json')
+if not os.path.exists(_hits_path):
+    print('Missing %s' % _hits_path)
+    sys.exit('Run s9_assetmatch.py first - it is what writes that file.')
+hits=json.load(open(_hits_path))
 want=set()
 paren=re.compile(r'\(([A-Za-z0-9_\-]{5,32})\)[^()]*$')
 for pid,st,url,path in hits:
@@ -15,6 +19,21 @@ print('distinct dead-post asset ids to hunt:',len(want))
 
 roots=[os.path.expanduser('~')+r'\Desktop',os.path.expanduser('~')+r'\Downloads',os.path.expanduser('~')+r'\Documents',
        os.path.expanduser('~')+r'\Pictures',os.path.expanduser('~')+r'\Videos',r'D:\\',r'E:\\']
+# This walks your whole profile and two entire drives. That is fine on the
+# machine it was written for and is not fine as the default behaviour of a
+# script somebody cloned five minutes ago, so it asks first.
+if '--scan' not in sys.argv:
+    print()
+    print('This would walk every file under:')
+    for r in roots: print('   ', r)
+    print()
+    print('That is your whole user profile and two entire drives. It reads only')
+    print('filenames, writes nothing outside _logs/_audit3, and can take a long')
+    print('time on a large disk.')
+    print()
+    print('Re-run with --scan to go ahead, or edit `roots` above first.')
+    sys.exit(0)
+
 found={}; scanned=0; t0=time.time()
 skip=re.compile(r'\\(node_modules|\.git|AppData|Windows|Program Files|\$Recycle)',re.I)
 for root in roots:

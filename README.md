@@ -386,10 +386,26 @@ reference implementations of each measurement — `s1_schema.py` prints the exac
 database schema the other 25 assume, which is the quickest way to see whether your
 own archive could be shaped to fit.
 
-They are also not fully independent, despite the flat numbering. `s3_disk.py` writes
-`disk_ids.json`, which `s4`, `s8` and `s21` read. `s9_assetmatch.py` writes
-`dead_asset_hits.json` for `s10` and `s12`. `s4_partition.py` writes
-`refetch_ids.json` for `s13`. Everything else stands alone.
+They are also not fully independent, despite the flat numbering:
+
+| Writes | Read by |
+|---|---|
+| `s3_disk.py` → `disk_ids.json` | `s4`, `s8`, `s21` |
+| `s9_assetmatch.py` → `dead_asset_hits.json` | `s10`, `s12` |
+| `s4_partition.py` → `refetch_ids.json` | `s13` |
+| `s11_wayback.py` → `wayback_results.jsonl` | `s19`, `s20`, `s22`, `s24` |
+
+That last one is the longest chain in the repo and it is also the slowest: `s11`
+probes the Internet Archive over the network, so the four scripts behind Finding 3
+cannot be run until it has finished.
+
+One more thing you should know before quoting any of these numbers. The per-stratum
+sample outcomes in `s14_ci.py`, `s15_weighted.py` and `s21_verify.py` are **literal
+dicts typed into the source**, transcribed from a probe run (`sample_v3_result.txt`)
+that is not in this repo. Those scripts compute the weighting, the Wilson intervals
+and the bootstrap from those constants and the population counts — the arithmetic is
+reproducible and auditable, the underlying probe is not. The constants are right
+there in the source if you want to check my arithmetic against them.
 
 ### Running them
 
@@ -403,7 +419,12 @@ export REDDIT_ARCHIVE="/mnt/d/Reddit Archive"   # bash
 python scripts/audit/s1_schema.py
 ```
 
-Run any of them without the variable set and it says so and stops.
+Every script that reads the archive says so and stops if the variable is not set.
+Two behave differently and it is worth knowing which: `s25_wbdiag.py` is a pure
+network diagnostic that never touches your archive, so it runs regardless and
+immediately makes live requests to archive.org. And `s10_hunt.py` walks your whole
+user profile and your D: and E: drives looking for files by name — it prints the
+list and refuses to start until you pass `--scan`.
 
 `scripts/sample_gfycat_recovery.py` is the one worth your time if you have an
 archive of your own. It needs only the database and the download log, it is dry-run

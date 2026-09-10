@@ -36,5 +36,17 @@ print('four buckets: files=%d distinct_ids=%d'%(bfiles,len(buckets)))
 print('old pools   : distinct_ids=%d'%len(old))
 print('buckets & old overlap ids=%d ; old-only=%d ; buckets-only=%d'%(len(buckets&old),len(old-buckets),len(buckets-old)))
 print('ALL pools distinct ids=%d'%len(buckets|old|pools['ExportMedia'][1]))
+# s4, s8 and s21 read disk_ids.json as ground truth about what is on disk. An
+# all-empty file is indistinguishable to them from "genuinely nothing archived",
+# so refuse to write one rather than hand three downstream scripts a confident
+# wrong answer. Zero here almost always means REDDIT_ARCHIVE points somewhere
+# that is not an archive.
+if not (buckets or old or pools['ExportMedia'][1]):
+    print()
+    print('Found no media anywhere under %s.'%R)
+    print('Expected at least one of: Images, Video, Animated, Text,')
+    print('Media Titled, Media by Subreddit, Reddit Export/media.')
+    sys.exit('Not writing disk_ids.json - s4, s8 and s21 would read it as fact.')
+
 json.dump({k:sorted(v[1]) for k,v in pools.items()},open(os.path.join(R,'_logs','_audit3','disk_ids.json'),'w'))
 print('per-bucket counts:',{k:(len(pools[k][0]),len(pools[k][1])) for k in ('Images','Video','Animated','Text')})

@@ -55,16 +55,33 @@ print()
 print('=== sniffed-type distribution of small files')
 print(collections.Counter(s[1] for s in small).most_common())
 print()
+# This is the detector behind the tombstone finding. Pointed at a root with no
+# media buckets it walks nothing and prints a clean bill of health, which is
+# the worst possible output for a script whose job is finding contamination.
+_present=[b for b in ('Images','Video','Animated') if os.path.isdir(os.path.join(R,b))]
+if not _present:
+    print()
+    sys.exit('None of Images/, Video/ or Animated/ exist under %s - nothing was scanned, '
+             'so a clean result here would mean nothing.'%R)
+print('scanning buckets:', ', '.join(_present))
+
 print('=== non-media (UNKNOWN/html) files at ANY size - full scan')
-bad=[]
+bad=[]; _walked=0
 for bkt in ('Images','Video','Animated'):
     for dp,dn,fn in os.walk(os.path.join(R,bkt)):
         for f in fn:
             p=os.path.join(dp,f)
+            _walked+=1
             try:
                 with open(p,'rb') as fh: head=fh.read(32)
             except OSError: continue
             if sniff(head) in ('UNKNOWN','html','xml'): bad.append((os.path.getsize(p),sniff(head),f,bkt))
+# Zero files examined is not a clean result, it is no result. Saying "0 non-media
+# files" here would be the same class of lie this repo's own README complains about.
+if not _walked:
+    sys.exit('Walked 0 files under %s - the buckets exist but are empty, so this '
+             'is not a clean bill of health, it is no measurement at all.'%R)
+print('  files examined:',_walked)
 print('  non-media files:',len(bad))
 print(collections.Counter(b[1] for b in bad).most_common())
 for b in bad[:15]: print('    %8d %-8s %s'%(b[0],b[1],b[2][:90]))
