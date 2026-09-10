@@ -365,8 +365,6 @@ recovery rate is genuinely unknown.**
 
 ## Code and data
 
-**→ https://github.com/nothing3471/reddit-link-rot**
-
 - `data/VALIDATION_predicted_vs_actual.csv` — the Finding 8 scoring table: per stratum, predicted rate, prediction CI, actual rate, actual CI. It counts download records, so its total is 6,378 rather than the 6,376 quoted above; `data/README.md` explains the two-post difference
 - `scripts/audit/` — the 26 scripts that produced the audit, including the Wayback availability probes and the tombstone detector
 - `scripts/sample_gfycat_recovery.py` — the Finding 9 sampler, if you want to close that gap yourself
