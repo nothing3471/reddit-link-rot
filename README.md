@@ -147,6 +147,15 @@ URLs the album stratum can't otherwise reach) but is not itself an image.
 
 Don't cost this route until someone byte-verifies it from an unblocked network.
 
+**Update, 2026-09-09.** Re-probed from the same machine and the same network:
+`web.archive.org` answers in 0.19s with HTTP 429, and `archive.org` in 0.21s with
+200. That is a rate limit — the thing the paragraph above says it was not — and it
+is nothing like an 18.5s transport-layer reset. Whatever was happening during the
+original run is not happening now, and I have not re-run the snapshot fetches, so
+the route remains unverified in the same direction as before. If you are planning
+around any of this, probe it yourself first. `scripts/audit/s25_wbdiag.py` is that
+probe and needs no archive to run.
+
 ## Finding 4: tombstones
 
 54 byte-identical **503-byte, 161×81 PNGs** — imgur's "image removed" graphic —
@@ -199,7 +208,9 @@ deletions. They aren't, on three lines of evidence:
 
 For contrast, a *real* host-level block on the same network (`web.archive.org`,
 above) looks completely different: uniform, transport-layer, 18.5s on every
-request, no HTTP response at all.
+request, no HTTP response at all. That contrast case no longer reproduces — see
+the update under Finding 3 — so read it as a description of what a transport-layer
+block looks like rather than as something you can go and observe today.
 
 Treat 403 on `v.redd.it` as "this video is gone."
 
